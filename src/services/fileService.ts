@@ -1,9 +1,7 @@
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import  fs  from "fs";
-import stat from "node:fs"
 import FileData from "../@types/types.js";
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -49,6 +47,10 @@ class uploadService{
         } catch (err) {
             console.error('Erro ao ler o diretório:', err);
         }
+    }
+
+    async getFilePath(filename: any){
+        return join(this.uploadDir, filename);
     }
 }
 

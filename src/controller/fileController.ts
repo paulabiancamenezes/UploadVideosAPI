@@ -32,7 +32,18 @@ const getFile = async (req: Request, res: Response) => {
     }
 };
 
+const downloadFile = async (req: Request, res: Response) =>{
+    try{
+        const filename = req.params.filename;
+        const pathFile = await uploadService.getFilePath(filename)
+        res.download(pathFile);
+    }catch(error: any){
+        res.status(500).json({ error: `Ocorreu um erro ao baixar o arquivo ${error.message}` });
+    }
+}
+
 export default {
     uploadFile,
-    getFile
+    getFile,
+    downloadFile
 };
