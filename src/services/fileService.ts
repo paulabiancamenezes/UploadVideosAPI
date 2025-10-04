@@ -19,6 +19,12 @@ class uploadService{
         if(!file){
             throw new Error("Arquivo não encontrado");
         }
+        const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+        if(file.size > MAX_SIZE){
+            throw new Error(`Arquivo muito grande. Tamanho máximo permitido: ${MAX_SIZE /(1024 * 1024)} MB. Tamanho atual: ${file.size / (1024 * 1024)} MB.`);
+        }
+
         const nameFile = `${Date.now()}-${file.originalname}`;
 
         return {
@@ -29,24 +35,21 @@ class uploadService{
             path: file.path
         };
     }
+    
     async getFiles() {
-        try {
-            const files = await fs.promises.readdir(this.uploadDir);
-            const fileDetails = await Promise.all(
-                files.map(async(filename) => {
-                    const filePath = join(this.uploadDir, filename);
-                    const stats = await fs.promises.stat(filePath);
-                    return {
-                        filename,
-                        size: stats.size,
-                        createdAt: stats.birthtime,
-                    };
-                })
-            );
-            return fileDetails;
-        } catch (err) {
-            console.error('Erro ao ler o diretório:', err);
-        }
+        const files = await fs.promises.readdir(this.uploadDir);
+        const fileDetails = await Promise.all(
+            files.map(async(filename) => {
+                const filePath = join(this.uploadDir, filename);
+                const stats = await fs.promises.stat(filePath);
+                return {
+                    filename,
+                    size: stats.size,
+                    createdAt: stats.birthtime,
+                };
+            })
+        );
+        return fileDetails;
     }
 
     async getFilePath(filename: any){

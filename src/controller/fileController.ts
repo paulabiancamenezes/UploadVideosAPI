@@ -13,7 +13,7 @@ const uploadFile = async (req: Request, res: Response) => {
     });
 
     }catch(error: any){
-        return res.status(500).json({ error: `Ocorreu um erro ao enviar arquivo ${error.message}` });
+        return res.status(500).json({ error: `${error.message}` });
     }
 };
 
@@ -38,7 +38,7 @@ const downloadFile = async (req: Request, res: Response) =>{
         const pathFile = await uploadService.getFilePath(filename)
         res.download(pathFile);
     }catch(error: any){
-        res.status(500).json({ error: `Ocorreu um erro ao baixar o arquivo ${error.message}` });
+        res.status(500).json({ error: `${error.message}` });
     }
 }
 
